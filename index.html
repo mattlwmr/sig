@@ -44,9 +44,31 @@ textarea { display: block; width: 100%; height: 120px; font-family: monospace; f
   .wrap { grid-template-columns: 1fr; }
   .btn-row { grid-template-columns: 1fr; }
 }
+
+#wmr-lock { position:fixed; top:0; left:0; width:100%; height:100%; background:#1a1a1a; display:flex; align-items:center; justify-content:center; z-index:9999; }
+#wmr-lock .box { background:#fff; border-radius:12px; padding:40px 36px; width:320px; text-align:center; }
+#wmr-lock .logo { font-size:20px; font-weight:700; color:#222; margin-bottom:6px; }
+#wmr-lock .tagline { font-size:13px; color:#888; margin-bottom:28px; }
+#wmr-lock input[type=password] { width:100%; padding:10px 14px; border:1px solid #ddd; border-radius:7px; font-size:14px; font-family:Arial,sans-serif; outline:none; margin-bottom:10px; text-align:center; letter-spacing:0.15em; }
+#wmr-lock input[type=password]:focus { border-color:#ff7300; box-shadow:0 0 0 2px rgba(255,115,0,0.15); }
+#wmr-lock .unlock-btn { width:100%; padding:11px; background:#ff7300; border:none; border-radius:7px; color:#fff; font-size:14px; font-weight:700; font-family:Arial,sans-serif; cursor:pointer; }
+#wmr-lock .unlock-btn:hover { background:#e56500; }
+#wmr-lock .error { font-size:12px; color:#e74c3c; margin-top:8px; min-height:18px; }
+
 </style>
 </head>
 <body>
+
+<div id="wmr-lock">
+  <div class="box">
+    <div class="logo">WMR / Nihilo</div>
+    <div class="tagline">Email Signature Builder</div>
+    <input type="password" id="wmr-pw" placeholder="Enter password" onkeydown="if(event.key==='Enter')wmrUnlock()">
+    <button class="unlock-btn" onclick="wmrUnlock()">Enter</button>
+    <div class="error" id="wmr-err"></div>
+  </div>
+</div>
+
 
 <h1>WMR / Nihilo Email Signature Builder</h1>
 <p class="sub">Fill in team member details, then download or copy the signature.</p>
@@ -310,6 +332,30 @@ textarea { display: block; width: 100%; height: 120px; font-family: monospace; f
   }
 
 }());
+
+  // Password protection
+  var WMR_PASS = 'rtr';
+  var WMR_KEY  = 'wmrsig_auth';
+
+  function wmrUnlock() {
+    var pw = document.getElementById('wmr-pw').value;
+    if (pw === WMR_PASS) {
+      sessionStorage.setItem(WMR_KEY, '1');
+      document.getElementById('wmr-lock').style.display = 'none';
+    } else {
+      document.getElementById('wmr-err').textContent = 'Incorrect password. Try again.';
+      document.getElementById('wmr-pw').value = '';
+      document.getElementById('wmr-pw').focus();
+    }
+  }
+
+  (function() {
+    if (sessionStorage.getItem(WMR_KEY) === '1') {
+      var lock = document.getElementById('wmr-lock');
+      if (lock) lock.style.display = 'none';
+    }
+  })();
+
 </script>
 
 </body>
