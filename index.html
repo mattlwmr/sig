@@ -14,8 +14,8 @@ h1 { font-size: 22px; font-weight: 700; color: #222; margin-bottom: 4px; }
 .panel-title { font-size: 11px; font-weight: 700; color: #888; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 18px; display: block; }
 .field { margin-bottom: 13px; }
 .field label { display: block; font-size: 11px; font-weight: 700; color: #555; margin-bottom: 4px; }
-.field input { width: 100%; padding: 8px 10px; border: 1px solid #ccc; border-radius: 6px; font-size: 13px; font-family: Arial, sans-serif; color: #222; background: #fff; outline: none; }
-.field input:focus { border-color: #ff7300; box-shadow: 0 0 0 2px rgba(255,115,0,0.15); }
+.field input, .field select { width: 100%; padding: 8px 10px; border: 1px solid #ccc; border-radius: 6px; font-size: 13px; font-family: Arial, sans-serif; color: #222; background: #fff; outline: none; }
+.field input:focus, .field select:focus { border-color: #ff7300; box-shadow: 0 0 0 2px rgba(255,115,0,0.15); }
 .preview-box { background: #ffffff; border: 1px solid #e5e5e5; border-radius: 8px; padding: 24px; min-height: 220px; margin-bottom: 16px; overflow: auto; }
 .btn-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px; }
 .btn { display: block; width: 100%; padding: 11px 14px; font-family: Arial, sans-serif; font-size: 13px; font-weight: 700; border-radius: 7px; border: 1.5px solid #ccc; background: #fff; color: #333; cursor: pointer; text-align: center; line-height: 1.2; }
@@ -39,12 +39,7 @@ textarea { display: block; width: 100%; height: 120px; font-family: monospace; f
 .tab-pane ol li { font-size: 12px; color: #555; margin-bottom: 5px; line-height: 1.6; }
 .tab-pane ol li strong { font-weight: 700; color: #333; }
 .note { display: block; font-size: 11px; color: #999; margin-top: 9px; padding-top: 9px; border-top: 1px solid #ffd0a0; line-height: 1.5; }
-.note code { font-family: monospace; background: #ffe8cc; color: #c05000; padding: 1px 4px; border-radius: 3px; font-size: 11px; }
-@media (max-width: 720px) {
-  .wrap { grid-template-columns: 1fr; }
-  .btn-row { grid-template-columns: 1fr; }
-}
-
+/* Lock screen */
 #wmr-lock { position:fixed; top:0; left:0; width:100%; height:100%; background:#1a1a1a; display:flex; align-items:center; justify-content:center; z-index:9999; }
 #wmr-lock .box { background:#fff; border-radius:12px; padding:40px 36px; width:320px; text-align:center; }
 #wmr-lock .logo { font-size:20px; font-weight:700; color:#222; margin-bottom:6px; }
@@ -54,7 +49,10 @@ textarea { display: block; width: 100%; height: 120px; font-family: monospace; f
 #wmr-lock .unlock-btn { width:100%; padding:11px; background:#ff7300; border:none; border-radius:7px; color:#fff; font-size:14px; font-weight:700; font-family:Arial,sans-serif; cursor:pointer; }
 #wmr-lock .unlock-btn:hover { background:#e56500; }
 #wmr-lock .error { font-size:12px; color:#e74c3c; margin-top:8px; min-height:18px; }
-
+@media (max-width: 720px) {
+  .wrap { grid-template-columns: 1fr; }
+  .btn-row { grid-template-columns: 1fr; }
+}
 </style>
 </head>
 <body>
@@ -69,17 +67,26 @@ textarea { display: block; width: 100%; height: 120px; font-family: monospace; f
   </div>
 </div>
 
-
 <h1>WMR / Nihilo Email Signature Builder</h1>
-<p class="sub">Fill in team member details, then download or copy the signature.</p>
+<p class="sub">Fill in team member details, then copy the preview directly into your email client.</p>
 
 <div class="wrap">
   <div class="panel">
     <span class="panel-title">Team Member Details</span>
+
+    <div class="field">
+      <label>Brand</label>
+      <select id="s-brand">
+        <option value="both">WMR / Nihilo (default)</option>
+        <option value="wmr">WMR Only</option>
+        <option value="nihilo">Nihilo Only</option>
+      </select>
+    </div>
+
     <div class="field"><label>First Name</label><input type="text" id="s-fname" placeholder="First Name" value=""></div>
     <div class="field"><label>Last Name</label><input type="text" id="s-lname" placeholder="Last Name" value=""></div>
     <div class="field"><label>Title / Role</label><input type="text" id="s-title" placeholder="Title / Role" value=""></div>
-    <div class="field"><label>Company</label><input type="text" id="s-company" placeholder="Company" value="WMR Competion Performance / Nihilo Concepts"></div>
+    <div class="field"><label>Company</label><input type="text" id="s-company" value="WMR Competion Performance / Nihilo Concepts"></div>
     <div class="field"><label>Phone 1</label><input type="text" id="s-phone1" value="772-426-3000"></div>
     <div class="field"><label>Phone 2 (optional)</label><input type="text" id="s-phone2" placeholder="Phone 2 (optional)" value=""></div>
     <div class="field"><label>Email Address</label><input type="text" id="s-email" placeholder="email@wmr1.com" value=""></div>
@@ -93,7 +100,7 @@ textarea { display: block; width: 100%; height: 120px; font-family: monospace; f
         <button class="tab-btn" data-tab="outlook">Outlook</button>
         <button class="tab-btn" data-tab="rackspace">Rackspace</button>
       </div>
-                  <div class="tab-pane active" id="tab-apple">
+      <div class="tab-pane active" id="tab-apple">
         <h4>Apple Mail</h4>
         <ol>
           <li>Fill in your details on the left</li>
@@ -104,7 +111,7 @@ textarea { display: block; width: 100%; height: 120px; font-family: monospace; f
           <li>Click in the signature field and press <strong>Cmd+V</strong></li>
         </ol>
       </div>
-                  <div class="tab-pane" id="tab-gmail">
+      <div class="tab-pane" id="tab-gmail">
         <h4>Gmail</h4>
         <ol>
           <li>Fill in your details on the left</li>
@@ -116,7 +123,7 @@ textarea { display: block; width: 100%; height: 120px; font-family: monospace; f
           <li>Click <strong>Save Changes</strong></li>
         </ol>
       </div>
-                  <div class="tab-pane" id="tab-outlook">
+      <div class="tab-pane" id="tab-outlook">
         <h4>Outlook (Mac &amp; Windows)</h4>
         <ol>
           <li>Fill in your details on the left</li>
@@ -128,7 +135,7 @@ textarea { display: block; width: 100%; height: 120px; font-family: monospace; f
           <li>Click <strong>OK / Save</strong></li>
         </ol>
       </div>
-                  <div class="tab-pane" id="tab-rackspace">
+      <div class="tab-pane" id="tab-rackspace">
         <h4>Rackspace Webmail</h4>
         <ol>
           <li>Fill in your details on the left</li>
@@ -161,15 +168,65 @@ textarea { display: block; width: 100%; height: 120px; font-family: monospace; f
 
 <script>
 (function () {
-  var ids = ['s-fname','s-lname','s-title','s-company','s-phone1','s-phone2','s-email','s-photo'];
+
+  var BRANDS = {
+    both: {
+      accent: 'rgb(255,115,0)',
+      accent2: 'rgb(255,115,0)',
+      logoUrl: 'https://cdn.shopify.com/s/files/1/0096/1980/0111/files/WMR_nihilo_footer.png?v=1769708124',
+      fbUrl: 'https://www.facebook.com/wmrcompetitionperformance',
+      igUrl: 'https://www.instagram.com/wmr_raceshop/',
+      web1: { label: 'wmr1.com', url: 'https://wmr1.com/' },
+      web2: { label: 'nihiloconcepts.com', url: 'https://nihiloconcepts.com/' },
+      address: '8300 SW Lost River Rd, Stuart, FL 34997',
+      addressUrl: 'https://maps.google.com/?q=8300+SW+Lost+River+Rd+Stuart+FL+34997',
+      phone1: '772-426-3000',
+      phone2: '',
+      email: '',
+      emailPlaceholder: 'email@wmr1.com',
+      company: 'WMR Competion Performance / Nihilo Concepts'
+    },
+    wmr: {
+      accent: 'rgb(255,115,0)',
+      accent2: 'rgb(255,115,0)',
+      logoUrl: 'https://cdn.shopify.com/s/files/1/0096/1980/0111/files/WMR_boxlogo_footer.png?v=1779984694',
+      fbUrl: 'https://www.facebook.com/wmrcompetitionperformance',
+      igUrl: 'https://www.instagram.com/wmr_raceshop/',
+      web1: { label: 'wmr1.com', url: 'https://wmr1.com/' },
+      web2: null,
+      address: '8300 SW Lost River Rd, Stuart, FL 34997',
+      addressUrl: 'https://maps.google.com/?q=8300+SW+Lost+River+Rd+Stuart+FL+34997',
+      phone1: '772-426-3000',
+      phone2: '',
+      email: '',
+      emailPlaceholder: 'email@wmr1.com',
+      company: 'WMR Competition Performance'
+    },
+    nihilo: {
+      accent: '#1A1F7A',
+      accent2: '#1A1F7A',
+      logoUrl: 'https://cdn.shopify.com/s/files/1/0096/1980/0111/files/WMR_nihilo_footer_tuff.png?v=1779986594',
+      fbUrl: 'https://www.facebook.com/nihiloconcepts',
+      igUrl: 'https://www.instagram.com/nihiloconcepts/',
+      web1: { label: 'nihiloconcepts.com', url: 'https://nihiloconcepts.com/' },
+      web2: null,
+      address: '8300 SW Lost River Rd, Stuart, FL 34997',
+      addressUrl: 'https://maps.google.com/?q=8300+SW+Lost+River+Rd+Stuart+FL+34997',
+      phone1: '1-855-464-4456',
+      phone2: '',
+      email: '',
+      emailPlaceholder: 'email@nihiloconcepts.com',
+      company: 'Nihilo Concepts'
+    }
+  };
+
+  var currentBrand = 'both';
   var current = '';
 
-  function val(id) {
-    var el = document.getElementById(id);
-    return el ? el.value : '';
-  }
+  function val(id) { var el = document.getElementById(id); return el ? el.value : ''; }
 
   function build() {
+    var b       = BRANDS[currentBrand];
     var fname   = val('s-fname');
     var lname   = val('s-lname');
     var title   = val('s-title');
@@ -178,9 +235,14 @@ textarea { display: block; width: 100%; height: 120px; font-family: monospace; f
     var phone2  = val('s-phone2').trim();
     var email   = val('s-email');
     var photo   = val('s-photo');
+
     var p2 = phone2
       ? '&nbsp;|&nbsp;<a href="tel:' + phone2 + '" style="text-decoration:none;color:rgb(0,0,0);font-size:14px;">' + phone2 + '</a>'
       : '';
+
+    var webCell = b.web2
+      ? '<a href="' + b.web1.url + '" style="text-decoration:none;color:rgb(0,0,0);font-size:14px;">' + b.web1.label + '</a>&nbsp;/&nbsp;<a href="' + b.web2.url + '" style="text-decoration:none;color:rgb(0,0,0);font-size:14px;">' + b.web2.label + '</a>'
+      : '<a href="' + b.web1.url + '" style="text-decoration:none;color:rgb(0,0,0);font-size:14px;">' + b.web1.label + '</a>';
 
     return [
       '<table cellpadding="0" cellspacing="0" border="0" style="vertical-align:-webkit-baseline-middle;font-family:Arial;">',
@@ -192,14 +254,14 @@ textarea { display: block; width: 100%; height: 120px; font-family: monospace; f
                   '<tbody>',
                     '<tr><td style="text-align:center;"><img src="' + photo + '" role="presentation" width="130" style="max-width:128px;display:block;"></td></tr>',
                     '<tr><td height="24"></td></tr>',
-                    '<tr><td style="text-align:center;"><img src="https://cdn.shopify.com/s/files/1/0096/1980/0111/files/WMR_nihilo_footer.png?v=1769708124" role="presentation" width="130" style="max-width:130px;display:block;"></td></tr>',
+                    '<tr><td style="text-align:center;"><img src="' + b.logoUrl + '" role="presentation" width="130" style="max-width:130px;display:block;"></td></tr>',
                     '<tr><td height="24"></td></tr>',
                     '<tr><td style="text-align:center;">',
-                      '<a href="https://www.facebook.com/wmrcompetitionperformance" style="display:inline-block;padding:0;background-color:rgb(255,115,0);border-radius:50%;">',
+                      '<a href="' + b.fbUrl + '" style="display:inline-block;padding:0;background-color:' + b.accent + ';border-radius:50%;">',
                         '<img src="https://cdn2.hubspot.net/hubfs/53/tools/email-signature-generator/icons/facebook-icon-dark-2x.png" alt="facebook" width="24" loading="lazy" style="display:block;border-radius:inherit;">',
                       '</a>',
                       '<span style="display:inline-block;width:5px;"></span>',
-                      '<a href="https://www.instagram.com/wmr_raceshop/" style="display:inline-block;padding:0;background-color:rgb(255,115,0);border-radius:50%;">',
+                      '<a href="' + b.igUrl + '" style="display:inline-block;padding:0;background-color:' + b.accent + ';border-radius:50%;">',
                         '<img src="https://cdn2.hubspot.net/hubfs/53/tools/email-signature-generator/icons/instagram-icon-dark-2x.png" alt="instagram" width="24" loading="lazy" style="display:block;border-radius:inherit;">',
                       '</a>',
                     '</td></tr>',
@@ -214,27 +276,27 @@ textarea { display: block; width: 100%; height: 120px; font-family: monospace; f
                 '<table cellpadding="0" cellspacing="0" border="0" style="vertical-align:-webkit-baseline-middle;width:140px;">',
                   '<tbody>',
                     '<tr><td height="24"></td></tr>',
-                    '<tr><td style="width:140px;height:1px;border-bottom:1px solid rgb(255,115,0);display:block;"></td></tr>',
+                    '<tr><td style="width:140px;height:1px;border-bottom:1px solid ' + b.accent2 + ';display:block;"></td></tr>',
                     '<tr><td height="24"></td></tr>',
                   '</tbody>',
                 '</table>',
                 '<table cellpadding="0" cellspacing="0" border="0" style="vertical-align:-webkit-baseline-middle;line-height:1;">',
                   '<tbody>',
                     '<tr style="vertical-align:middle;height:28px;">',
-                      '<td width="26" style="vertical-align:middle;"><span style="display:inline-block;background-color:rgb(255,115,0);"><img src="https://cdn2.hubspot.net/hubfs/53/tools/email-signature-generator/icons/phone-icon-dark-2x.png" alt="mobilePhone" width="18" style="display:block;"></span></td>',
+                      '<td width="26" style="vertical-align:middle;"><span style="display:inline-block;background-color:' + b.accent + ';"><img src="https://cdn2.hubspot.net/hubfs/53/tools/email-signature-generator/icons/phone-icon-dark-2x.png" alt="mobilePhone" width="18" style="display:block;"></span></td>',
                       '<td style="padding:0;"><a href="tel:' + phone1 + '" style="text-decoration:none;color:rgb(0,0,0);font-size:14px;">' + phone1 + '</a>' + p2 + '</td>',
                     '</tr>',
                     '<tr style="vertical-align:middle;height:28px;">',
-                      '<td width="26" style="vertical-align:middle;"><span style="display:inline-block;background-color:rgb(255,115,0);"><img src="https://cdn2.hubspot.net/hubfs/53/tools/email-signature-generator/icons/email-icon-dark-2x.png" alt="emailAddress" width="18" style="display:block;"></span></td>',
+                      '<td width="26" style="vertical-align:middle;"><span style="display:inline-block;background-color:' + b.accent + ';"><img src="https://cdn2.hubspot.net/hubfs/53/tools/email-signature-generator/icons/email-icon-dark-2x.png" alt="emailAddress" width="18" style="display:block;"></span></td>',
                       '<td style="padding:0;"><a href="mailto:' + email + '" style="text-decoration:none;color:rgb(0,0,0);font-size:14px;">' + email + '</a></td>',
                     '</tr>',
                     '<tr style="vertical-align:middle;height:28px;">',
-                      '<td width="26" style="vertical-align:middle;"><span style="display:inline-block;background-color:rgb(255,115,0);"><img src="https://cdn2.hubspot.net/hubfs/53/tools/email-signature-generator/icons/link-icon-dark-2x.png" alt="website" width="18" style="display:block;"></span></td>',
-                      '<td style="padding:0;"><a href="https://wmr1.com/" style="text-decoration:none;color:rgb(0,0,0);font-size:14px;">wmr1.com</a>&nbsp;/&nbsp;<a href="https://nihiloconcepts.com/" style="text-decoration:none;color:rgb(0,0,0);font-size:14px;">nihiloconcepts.com</a></td>',
+                      '<td width="26" style="vertical-align:middle;"><span style="display:inline-block;background-color:' + b.accent + ';"><img src="https://cdn2.hubspot.net/hubfs/53/tools/email-signature-generator/icons/link-icon-dark-2x.png" alt="website" width="18" style="display:block;"></span></td>',
+                      '<td style="padding:0;">' + webCell + '</td>',
                     '</tr>',
                     '<tr style="vertical-align:middle;height:28px;">',
-                      '<td width="26" style="vertical-align:middle;"><span style="display:inline-block;background-color:rgb(255,115,0);"><img src="https://cdn2.hubspot.net/hubfs/53/tools/email-signature-generator/icons/address-icon-dark-2x.png" alt="address" width="18" style="display:block;"></span></td>',
-                      '<td style="padding:0;"><span style="font-size:14px;">8300 SW Lost River Rd, Stuart, FL 34997</span></td>',
+                      '<td width="26" style="vertical-align:middle;"><span style="display:inline-block;background-color:' + b.accent + ';"><img src="https://cdn2.hubspot.net/hubfs/53/tools/email-signature-generator/icons/address-icon-dark-2x.png" alt="address" width="18" style="display:block;"></span></td>',
+                      '<td style="padding:0;"><a href="' + b.addressUrl + '" style="text-decoration:none;color:rgb(0,0,0);font-size:14px;">' + b.address + '</a></td>',
                     '</tr>',
                   '</tbody>',
                 '</table>',
@@ -246,25 +308,35 @@ textarea { display: block; width: 100%; height: 120px; font-family: monospace; f
     ].join('');
   }
 
+  function applyBrandDefaults(b) {
+    var el;
+    el = document.getElementById('s-phone1');  if (el) el.value = b.phone1;
+    el = document.getElementById('s-phone2');  if (el) el.value = b.phone2;
+    el = document.getElementById('s-company'); if (el) el.value = b.company;
+    el = document.getElementById('s-email');
+    if (el) {
+      el.value = b.email;
+      el.placeholder = b.emailPlaceholder || 'email@wmr1.com';
+    }
+  }
+
   function rebuild() {
     current = build();
-    var preview = document.getElementById('s-preview');
-    var code    = document.getElementById('s-code');
-    if (preview) preview.innerHTML = current;
-    if (code)    code.value = current;
+    var p = document.getElementById('s-preview');
+    var c = document.getElementById('s-code');
+    if (p) p.innerHTML = current;
+    if (c) c.value = current;
   }
 
   function download() {
     var fname = val('s-fname'), lname = val('s-lname');
     var html = '<!DOCTYPE html><html><head><meta charset="utf-8"><title>Signature</title><style>body{margin:40px;background:#fff;}</style></head><body>' + current + '</body></html>';
     var blob = new Blob([html], {type:'text/html'});
-    var url  = URL.createObjectURL(blob);
-    var a    = document.createElement('a');
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
     a.href = url;
     a.download = 'signature_' + fname.toLowerCase() + '_' + lname.toLowerCase() + '.html';
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
     URL.revokeObjectURL(url);
   }
 
@@ -277,10 +349,7 @@ textarea { display: block; width: 100%; height: 120px; font-family: monospace; f
     if (btn) {
       btn.className = 'btn btn-success';
       btn.textContent = '\u2713 Copied!';
-      setTimeout(function() {
-        btn.className = 'btn';
-        btn.textContent = '\u2398 Copy HTML';
-      }, 2000);
+      setTimeout(function() { btn.className = 'btn'; btn.textContent = '\u2398 Copy HTML'; }, 2000);
     }
   }
 
@@ -295,28 +364,59 @@ textarea { display: block; width: 100%; height: 120px; font-family: monospace; f
     if (btn) btn.className = 'tab-btn active';
   }
 
+  // Password
+  var WMR_PASS = 'rtr';
+  var WMR_KEY  = 'wmrsig_auth';
+
+  window.wmrUnlock = function() {
+    var pw = document.getElementById('wmr-pw').value;
+    if (pw.toLowerCase() === WMR_PASS.toLowerCase()) {
+      sessionStorage.setItem(WMR_KEY, '1');
+      document.getElementById('wmr-lock').style.display = 'none';
+    } else {
+      document.getElementById('wmr-err').textContent = 'Incorrect password. Try again.';
+      document.getElementById('wmr-pw').value = '';
+      document.getElementById('wmr-pw').focus();
+    }
+  };
+
   function init() {
-    // Bind inputs
-    for (var i = 0; i < ids.length; i++) {
+    // Check session
+    if (sessionStorage.getItem(WMR_KEY) === '1') {
+      var lock = document.getElementById('wmr-lock');
+      if (lock) lock.style.display = 'none';
+    }
+
+    // Brand switcher
+    var brandEl = document.getElementById('s-brand');
+    if (brandEl) {
+      brandEl.addEventListener('change', function() {
+        currentBrand = this.value;
+        applyBrandDefaults(BRANDS[currentBrand]);
+        rebuild();
+      });
+    }
+
+    // Inputs
+    var inputIds = ['s-fname','s-lname','s-title','s-company','s-phone1','s-phone2','s-email','s-photo'];
+    for (var i = 0; i < inputIds.length; i++) {
       (function(id) {
         var el = document.getElementById(id);
         if (el) el.addEventListener('input', rebuild);
-      })(ids[i]);
+      })(inputIds[i]);
     }
 
-    // Bind buttons
+    // Buttons
     var dl   = document.getElementById('s-dl');
     var copy = document.getElementById('s-copy');
     if (dl)   dl.addEventListener('click', download);
     if (copy) copy.addEventListener('click', copyHTML);
 
-    // Bind tabs
+    // Tabs
     var tabBtns = document.querySelectorAll('.tab-btn');
     for (var j = 0; j < tabBtns.length; j++) {
       (function(btn) {
-        btn.addEventListener('click', function() {
-          switchTab(btn.getAttribute('data-tab'));
-        });
+        btn.addEventListener('click', function() { switchTab(btn.getAttribute('data-tab')); });
       })(tabBtns[j]);
     }
 
@@ -330,30 +430,6 @@ textarea { display: block; width: 100%; height: 120px; font-family: monospace; f
   }
 
 }());
-
-  // Password protection
-  var WMR_PASS = 'rtr';
-  var WMR_KEY  = 'wmrsig_auth';
-
-  function wmrUnlock() {
-    var pw = document.getElementById('wmr-pw').value;
-    if (pw === WMR_PASS) {
-      sessionStorage.setItem(WMR_KEY, '1');
-      document.getElementById('wmr-lock').style.display = 'none';
-    } else {
-      document.getElementById('wmr-err').textContent = 'Incorrect password. Try again.';
-      document.getElementById('wmr-pw').value = '';
-      document.getElementById('wmr-pw').focus();
-    }
-  }
-
-  (function() {
-    if (sessionStorage.getItem(WMR_KEY) === '1') {
-      var lock = document.getElementById('wmr-lock');
-      if (lock) lock.style.display = 'none';
-    }
-  })();
-
 </script>
 
 </body>
